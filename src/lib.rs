@@ -51,7 +51,7 @@ const DATA: &[u8] = include_bytes!("./tweet.json");
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct DonaldTweet<'a> {
+pub struct Tweet<'a> {
     id: u64,
     text: String,
     #[serde(with = "shortbool")]
@@ -65,18 +65,18 @@ pub struct DonaldTweet<'a> {
     retweets: u32,
     date: &'a str,
 }
-impl<'a> DonaldTweet<'a> {
+impl<'a> Tweet<'a> {
     pub fn text(&self) -> &str {
         &self.text
     }
 }
 pub struct RandomTweetGenerator<'a> {
-    db: MiniVec<DonaldTweet<'a>>,
+    db: MiniVec<Tweet<'a>>,
 }
 impl Default for RandomTweetGenerator<'_> {
     fn default() -> Self {
-        let db: MiniVec<DonaldTweet> = serde_json::from_slice(DATA).unwrap();
-        let db: MiniVec<DonaldTweet> = db
+        let db: MiniVec<Tweet> = serde_json::from_slice(DATA).unwrap();
+        let db: MiniVec<Tweet> = db
             .into_iter()
             .filter(|t| {
                 !t.is_retweet
@@ -90,7 +90,7 @@ impl Default for RandomTweetGenerator<'_> {
 }
 
 impl<'a> RandomTweetGenerator<'a> {
-    pub fn get_random_tweet(&self) -> &DonaldTweet<'a> {
+    pub fn get_random_tweet(&self) -> &Tweet<'a> {
         let mut rng: ThreadRng = rand::thread_rng();
         let random_index = rng.gen_range(0..self.db.len());
         &self.db[random_index]

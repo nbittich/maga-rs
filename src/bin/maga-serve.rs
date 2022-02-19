@@ -3,11 +3,11 @@
 #[macro_use]
 extern crate rocket;
 use clap::Parser;
-use maga::{DonaldTweet, RandomTweetGenerator};
+use maga::{Tweet, RandomTweetGenerator};
 
 #[get("/?<count>")]
 fn index(count: Option<u16>) -> String {
-    let mut result: Vec<&DonaldTweet> = vec![];
+    let mut result: Vec<&Tweet> = vec![];
     let tweet_generator: RandomTweetGenerator = Default::default();
 
     let count = if let Some(count) = count { count } else { 1 };
