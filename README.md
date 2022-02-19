@@ -1,5 +1,5 @@
 # Random Donald Trump's tweet
-![Build](https://github.com/github/docs/actions/workflows/rust.yml/badge.svg)
+![Build](https://github.com/nbittich/maga-rs/actions/workflows/rust.yml/badge.svg)
 ## How to
 - `cargo install maga`
 - `maga # prints one tweet to the terminal`
