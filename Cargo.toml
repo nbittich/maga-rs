@@ -7,7 +7,7 @@ description =  "Random Donald Trump's tweets"
 categories = ["command-line-utilities"]
 license = "MIT"
 readme = "README.md"
-
+homepage = "https://github.com/nbittich/maga-rs"
 
 [dependencies]
 anyhow = "1.0.53"
