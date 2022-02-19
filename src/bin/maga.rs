@@ -1,14 +1,17 @@
 use clap::Parser;
+use maga::shortbool;
+use minivec::MiniVec;
 use rand::{prelude::ThreadRng, Rng};
 use serde::{Deserialize, Serialize};
 
 const DATA: &[u8] = include_bytes!("./tweet.json");
 
+/// Random Donald Tweets
 fn main() -> Result<(), anyhow::Error> {
     let args = Args::parse();
     let mut rng: ThreadRng = rand::thread_rng();
-    let db: Vec<DonaldTweet> = serde_json::from_slice(DATA)?;
-    let db: Vec<&DonaldTweet> = db
+    let db: MiniVec<DonaldTweet> = serde_json::from_slice(DATA)?;
+    let db: MiniVec<&DonaldTweet> = db
         .iter()
         .filter(|t| {
             !t.is_retweet
@@ -49,47 +52,4 @@ struct Args {
     /// Number of tweets to display
     #[clap(short, long, default_value_t = 1)]
     count: u8,
-}
-
-mod shortbool {
-    use serde::{de, Deserializer, Serializer};
-    use std::fmt;
-
-    pub fn serialize<S>(value: &bool, ser: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        if *value {
-            ser.serialize_str("t")
-        } else {
-            ser.serialize_str("f")
-        }
-    }
-
-    pub fn deserialize<'de, D>(de: D) -> Result<bool, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        struct ShortBoolVisitor;
-        impl<'de> de::Visitor<'de> for ShortBoolVisitor {
-            type Value = bool;
-
-            fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-                formatter.write_str("a boolean value")
-            }
-
-            fn visit_str<E>(self, value: &str) -> Result<Self::Value, E>
-            where
-                E: de::Error,
-            {
-                match value {
-                    "t" => Ok(true),
-                    "f" => Ok(false),
-                    _ => Err(E::custom(format!("found `{}`, expected `t` or `f`", value))),
-                }
-            }
-        }
-
-        de.deserialize_str(ShortBoolVisitor)
-    }
 }
