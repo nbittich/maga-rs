@@ -1,6 +1,6 @@
 [package]
 name = "maga"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 authors = ["Nordine Bittich <contact@bittich.be>"]
 description =  "Random Donald Trump's tweets"
