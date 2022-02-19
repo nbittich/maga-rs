@@ -11,7 +11,12 @@
     - `http://localhost:8000?count=1`
 
 
-## Docker
-- `docker build -t x .`
-- `docker run -it x maga -c 1`
-- `docker run -it -p 9999:9999 x maga-serve -p 9999`
+## Docker - Released (Recommended)
+- `docker build -t relz -f Dockerfile.stable .`
+- `docker run -it relz maga -c 1`
+- `docker run -it -p 9999:9999 relz maga-serve -p 9999`
+
+## Docker - Dev
+- `docker build -t dev -f Dockerfile.dev .`
+- `docker run -it dev maga -c 1`
+- `docker run -it -p 9999:9999 dev maga-serve -p 9999`

@@ -1,0 +1,6 @@
+from rustlang/rust:nightly-slim
+RUN cargo install maga
+RUN printf "#!/bin/bash\n\$@" >> docker-entrypoint.sh 
+RUN cat docker-entrypoint.sh
+RUN chmod a+x docker-entrypoint.sh
+ENTRYPOINT [ "./docker-entrypoint.sh" ]
