@@ -1,3 +1,7 @@
+use minivec::MiniVec;
+use rand::{prelude::ThreadRng, Rng};
+use serde::{Deserialize, Serialize};
+
 /// Deserialize / Serialize short bool
 /// e.g 't' becomes true, while 'f' becomes false
 pub mod shortbool {
@@ -40,5 +44,55 @@ pub mod shortbool {
         }
 
         de.deserialize_str(ShortBoolVisitor)
+    }
+}
+
+const DATA: &[u8] = include_bytes!("./tweet.json");
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct DonaldTweet<'a> {
+    id: u64,
+    text: String,
+    #[serde(with = "shortbool")]
+    is_retweet: bool,
+    #[serde(with = "shortbool")]
+    is_deleted: bool,
+    #[serde(with = "shortbool")]
+    is_flagged: bool,
+    device: &'a str,
+    favorites: u32,
+    retweets: u32,
+    date: &'a str,
+}
+impl<'a> DonaldTweet<'a> {
+    pub fn text(&self) -> &str {
+        &self.text
+    }
+}
+pub struct RandomTweetGenerator<'a> {
+    db: MiniVec<DonaldTweet<'a>>,
+}
+impl Default for RandomTweetGenerator<'_> {
+    fn default() -> Self {
+        let db: MiniVec<DonaldTweet> = serde_json::from_slice(DATA).unwrap();
+        let db: MiniVec<DonaldTweet> = db
+            .into_iter()
+            .filter(|t| {
+                !t.is_retweet
+                    && !t.text.starts_with("RT")
+                    && !t.text.contains('@')
+                    && !t.text.starts_with(r#""""#)
+            })
+            .collect();
+        Self { db }
+    }
+}
+
+impl<'a> RandomTweetGenerator<'a> {
+    pub fn get_random_tweet(&self) -> &DonaldTweet<'a> {
+        let mut rng: ThreadRng = rand::thread_rng();
+        let random_index = rng.gen_range(0..self.db.len());
+        &self.db[random_index]
     }
 }
