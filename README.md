@@ -2,9 +2,18 @@
 ![Build](https://github.com/nbittich/maga-rs/actions/workflows/rust.yml/badge.svg)
 
 🚀 blazing fast!! 🚀 barely unsafe !! 🔥 generates random tweets in 10e8 ns!! 🚀
+## What's new? 
+- New desktop version!!!!! 🔥🔥🔥🔥🔥🔥
+
+![Maga Desktop](maga-desktop.png?raw=true "Maga")
+
+- Make sure to install:
+    -  ```sudo apt install libwebkit2gtk-4.0-dev libgtk-3-dev libappindicator3-dev```
+`
 ## How to
 - `cargo install maga`
 - `maga # prints one tweet to the terminal`
+- `maga-desktop # Open the desktop app`
 - `maga --count=2 # prints 2 tweets to the terminal`
 - `maga-serve # small rest endpoint -- Default port is 8000`
 - `maga-serve --port=<port> # change default port`
